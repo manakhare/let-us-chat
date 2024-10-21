@@ -28,7 +28,7 @@ export function setupSocket(io: Server) {
         socket.join(socket.room);
 
         socket.on("message", async  (data) => {
-            console.log(data);
+            // console.log(data);
             
             // subscribe to kafka producer
             await produceMessage(process.env.KAFKA_TOPIC, data);

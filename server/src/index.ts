@@ -28,8 +28,12 @@ const io = new Server(server, {
   cors: {
     origin: "*"
   }, 
-  adapter: createAdapter(redis)
+  // adapter: createAdapter(redis)
 })
+
+const pubClient = redis;
+
+io.adapter(createAdapter(pubClient));
 
 instrument(io, {
   auth: false,

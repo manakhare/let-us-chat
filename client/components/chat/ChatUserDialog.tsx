@@ -14,6 +14,7 @@ import axios from "axios";
 import { CHAT_GROUP_USERS_URL } from "@/lib/apiEndPoints"
 import { toast } from "sonner";
 import { GroupChatType } from "@/types";
+import { useRouter } from "next/navigation";
 
 export default function ChatUserDialog({
   open,
@@ -29,6 +30,7 @@ export default function ChatUserDialog({
     name: "",
     passcode: "",
   });
+  const router = useRouter();
 
   useEffect(() => {
     const data = localStorage.getItem(params["id"] as string);
@@ -56,6 +58,8 @@ export default function ChatUserDialog({
           params["id"] as string,
           JSON.stringify(data?.data)
         );
+
+        router.refresh();
         // localStorage.setItem("name", state.name);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
@@ -68,6 +72,8 @@ export default function ChatUserDialog({
       setOpen(false);
     }
   };
+
+  
 
   return (
     <Dialog open={open}>
