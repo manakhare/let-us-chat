@@ -1,8 +1,10 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { CustomUser } from "@/app/api/auth/[...nextauth]/options";
+import LoginModal from "../auth/LoginModal";
 
-export default function HeroSection() {
+export default function HeroSection({ user }: { user?: CustomUser | null }) {
   return (
     <section className="flex-1 flex flex-col items-center justify-center text-center p-12 bg-gradient-to-b from-gray-50 to-white dark:bg-gradient-to-b dark:from-slate-800 dark:to-slate-950">
       <h1 className="text-5xl font-extrabold text-gray-900 mb-4 dark:text-slate-200">
@@ -12,11 +14,14 @@ export default function HeroSection() {
         QuickChat makes it effortless to create secure chat links and start
         conversations in seconds.
       </p>
-      <Link href="/dashboard">
+      {user ? 
+      (<Link href="/dashboard">
         <Button size="lg" className="animate-pulse">
           Start Chatting
         </Button>
-      </Link>
+      </Link>) : (
+        <LoginModal />
+      )}
 
       <div className="mt-12 w-full max-w-5xl flex justify-center">
         {/* Placeholder for Illustration/Image */}

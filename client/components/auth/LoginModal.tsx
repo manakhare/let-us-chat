@@ -11,7 +11,7 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 
-const LoginModal = () => {
+const LoginModal = ({text}: {text?: string}) => {
 
     const handleLogin = () => {
         signIn("google", {

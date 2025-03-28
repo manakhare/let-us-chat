@@ -34,6 +34,9 @@ export async function fetchChatGroup(id: string) {
         cache: "no-cache"
     });
 
+    console.log("The response is: ", res);
+    
+
     if(!res.ok) {
         throw new Error("Failed to fetch Chat Group data");
     }

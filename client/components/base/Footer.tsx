@@ -14,12 +14,12 @@ export default function Footer() {
             <Link href="/terms-of-service">Terms of Service</Link>
           </div>
         </div>
-        <div className="space-y-4 flex flex-col justify-center items-center">
+        <div className="space-y-4 flex flex-row justify-center items-center gap-5">
           <Input
             placeholder="Subscribe to our newsletter"
             className="bg-gray-800 border-none"
           />
-          <Button>Subscribe</Button>
+          <Button className="">Subscribe</Button>
         </div>
       </div>
     </footer>
