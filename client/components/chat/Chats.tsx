@@ -5,8 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { GroupChatType, GroupChatUserType } from "@/types";
 // import { useRouter } from "next/navigation";
 
-
-export default function  Chats({
+export default function Chats({
   group,
   oldMessages,
   chatUser,
@@ -19,9 +18,6 @@ export default function  Chats({
   const [messages, setMessages] = useState<Array<MessageType>>(oldMessages);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   // const router = useRouter();
-  
-
-  
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -38,16 +34,17 @@ export default function  Chats({
   }, []);
 
   useEffect(() => {
-    socket.on("message", (data: MessageType) => {
-      // console.log("The message is", data);
+    const handleMessage = (data: MessageType) => {
       setMessages((prevMessages) => [...prevMessages, data]);
       scrollToBottom();
-    });
+    };
+
+    socket.on("message", handleMessage);
 
     return () => {
-      socket.close();
+      socket.off("message", handleMessage);
     };
-  }, []);
+  }, [socket]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -64,7 +61,6 @@ export default function  Chats({
     // router.reload()
     setMessage("");
     setMessages([...messages, payload]);
-    
   };
 
   return (
@@ -73,27 +69,26 @@ export default function  Chats({
         <div ref={messagesEndRef} />
         <div className="flex flex-col gap-2 w-full">
           {messages.map((message) => (
-            <div
-               key={message.id}>
-                {message.name === chatUser?.name ? 
-                  <div className="flex w-full flex-col">
-                    <div className="font-thin text-xs self-end">
-                      {message.name || "Anonymous"}
-                    </div>
-                    <div className="max-w-sm rounded-lg p-2 bg-gradient-to-r from-blue-400 to-blue-600  text-white self-end">
-                      {message.message}
-                    </div>
+            <div key={message.id}>
+              {message.name === chatUser?.name ? (
+                <div className="flex w-full flex-col">
+                  <div className="font-thin text-xs self-end">
+                    {message.name || "Anonymous"}
                   </div>
-                  :
-                  <div className="flex w-full flex-col">
-                    <div className="font-thin text-xs self-start">
-                      {message.name || "Anonymous"}
-                    </div>
-                    <div className="max-w-sm rounded-lg p-2 dark:text-slate-100 dark:bg-gradient-to-r dark:from-gray-600 dark:to-gray-500 bg-gradient-to-r from-gray-200 to-gray-300 text-black self-start">
-                      {message.message}
-                    </div>
+                  <div className="max-w-sm rounded-lg p-2 bg-gradient-to-r from-blue-400 to-blue-600  text-white self-end">
+                    {message.message}
                   </div>
-                  }
+                </div>
+              ) : (
+                <div className="flex w-full flex-col">
+                  <div className="font-thin text-xs self-start">
+                    {message.name || "Anonymous"}
+                  </div>
+                  <div className="max-w-sm rounded-lg p-2 dark:text-slate-100 dark:bg-gradient-to-r dark:from-gray-600 dark:to-gray-500 bg-gradient-to-r from-gray-200 to-gray-300 text-black self-start">
+                    {message.message}
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
